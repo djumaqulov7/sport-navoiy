@@ -1,0 +1,9 @@
+tools
+tools/
+tools/*
+*.exe
+*.zip
+*.log
+__pycache__
+*.pyc
+.git

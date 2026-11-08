@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0"/>
+  <title>sport.NAVOIY — Admin Boshqaruv Paneli</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+
+  <!-- Google Fonts & Material Symbols -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "gold": "#C59B27",
+            "gold-accent": "#D4AF37",
+            "gold-light": "rgba(212, 175, 55, 0.12)",
+            "dark-sidebar": "#111113",
+            "dark-surface": "#18181B",
+            "dark-card": "#1E1E22",
+            "dark-bg": "#0B0B0D",
+            "border-dark": "#27272A",
+            "border-subtle": "#2F2F35"
+          },
+          fontFamily: {
+            display: ["'Space Grotesk'", "sans-serif"],
+            body: ["'Inter'", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0B0B0D;
+      color: #F2F2F3;
+      margin: 0;
+      padding: 0;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #111113;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #27272A;
+      border-radius: 9999px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #C59B27;
+    }
+    .nav-tab-btn.active {
+      background-color: #C59B27;
+      color: #000000;
+      font-weight: 700;
+    }
+    .nav-tab-btn.active .material-symbols-outlined {
+      color: #000000;
+    }
+  </style>
+
+  <script src="admin.js" defer></script>
+</head>
+<body class="antialiased min-h-screen flex flex-col md:flex-row">
+
+  <!-- ==========================================================================
+       LOGIN OVERLAY (Shown when not authenticated)
+       ========================================================================== -->
+  <div class="fixed inset-0 z-50 bg-[#0B0B0D] flex items-center justify-center p-4" id="admin-login-screen">
+    <div class="w-full max-w-md bg-[#18181B] border border-[#27272A] rounded-2xl p-8 shadow-2xl">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-10 h-10 rounded-xl bg-gold flex items-center justify-center text-black font-display font-bold text-xl shadow-md">
+          K
+        </div>
+        <div>
+          <h1 class="font-display font-bold text-xl text-white tracking-tight">sport.NAVOIY</h1>
+          <p class="text-[11px] font-bold text-gold uppercase tracking-wider">D&amp;A SPORT KELME PRO v2.4</p>
+        </div>
+      </div>
+
+      <div class="p-3 bg-[#111113] border border-[#27272A] rounded-lg mb-6 flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="text-xs text-zinc-300">Xavfsiz Admin Avtorizatsiyasi</span>
+      </div>
+
+      <form class="space-y-4" id="admin-login-form">
+        <div>
+          <label class="block text-xs font-bold uppercase text-zinc-400 mb-1">Login</label>
+          <input class="w-full bg-[#111113] border border-[#27272A] focus:border-gold rounded-lg px-3.5 py-2.5 text-sm text-white outline-none transition" name="username" type="text" placeholder="Admin logini" required autocomplete="username"/>
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase text-zinc-400 mb-1">Parol</label>
+          <input class="w-full bg-[#111113] border border-[#27272A] focus:border-gold rounded-lg px-3.5 py-2.5 text-sm text-white outline-none transition" name="password" type="password" placeholder="Admin paroli" required autocomplete="current-password"/>
+        </div>
+        <button class="w-full bg-gold hover:bg-gold-accent text-black font-display font-bold py-2.5 rounded-lg shadow-md transition flex items-center justify-center gap-2 mt-4" type="submit">
+          <span class="material-symbols-outlined text-[20px]">lock_open</span>
+          <span>Tizimga kirish</span>
+        </button>
+      </form>
+
+      <div class="mt-6 pt-4 border-t border-[#27272A] flex items-center justify-between text-xs text-zinc-400">
+        <a class="hover:text-gold transition flex items-center gap-1" href="/">
+          <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+          <span>Saytga qaytish</span>
+        </a>
+        <span class="text-[11px]">Navoiy Hub 2026</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       ADMIN SIDEBAR (Desktop) & APP BAR (Mobile)
+       ========================================================================== -->
+  <aside class="w-full md:w-64 bg-[#111113] border-b md:border-b-0 md:border-r border-[#27272A] flex-shrink-0 flex flex-col justify-between z-30 md:sticky md:top-0 md:h-screen">
+    <!-- Top Branding -->
+    <div>
+      <div class="h-16 px-5 flex items-center justify-between border-b border-[#27272A] bg-black">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-gold flex items-center justify-center text-black font-bold text-lg font-display">
+            K
+          </div>
+          <div class="flex flex-col">
+            <span class="font-display text-[16px] tracking-tight text-white font-bold leading-none">sport.NAVOIY</span>
+            <span class="text-[9px] font-semibold uppercase tracking-wider text-gold mt-1">Admin Boshqaruv</span>
+          </div>
+        </div>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button class="md:hidden text-zinc-300 p-1" id="mobile-menu-toggle" type="button" aria-label="Menyu">
+          <span class="material-symbols-outlined text-[24px]">menu</span>
+        </button>
+      </div>
+
+      <!-- Online Status Badge -->
+      <div class="p-2.5 mx-3 my-3 bg-[#1C1C1F] rounded-lg border border-[#2B2B30] flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="text-xs font-medium text-zinc-300">Online tizim</span>
+        </div>
+        <span class="text-[10px] font-bold text-gold bg-[#2A2315] px-1.5 py-0.5 rounded border border-gold/30">PRO v2.4</span>
+      </div>
+
+      <!-- Nav Links -->
+      <nav class="px-3 space-y-1 hidden md:block" id="admin-sidebar-nav">
+        <button class="nav-tab-btn active w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition" data-tab="dashboard">
+          <span class="material-symbols-outlined text-[20px] text-zinc-400">dashboard</span>
+          <span>Boshqaruv paneli</span>
+        </button>
+        <button class="nav-tab-btn w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-zinc-300 hover:text-white hover:bg-[#1E1E22] text-sm transition" data-tab="orders">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-[20px] text-zinc-400">shopping_bag</span>
+            <span>Buyurtmalar</span>
+          </div>
+          <span class="text-[11px] font-bold px-1.5 py-0.2 rounded-full bg-red-500/20 text-red-400" id="pending-orders-badge">0</span>
+        </button>
+        <button class="nav-tab-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-zinc-300 hover:text-white hover:bg-[#1E1E22] text-sm transition" data-tab="products">
+          <span class="material-symbols-outlined text-[20px] text-zinc-400">inventory_2</span>
+          <span>Mahsulotlar</span>
+        </button>
+        <button class="nav-tab-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-zinc-300 hover:text-white hover:bg-[#1E1E22] text-sm transition" data-tab="users">
+          <span class="material-symbols-outlined text-[20px] text-zinc-400">group</span>
+          <span>Mijozlar bazasi</span>
+        </button>
+        <button class="nav-tab-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-zinc-300 hover:text-white hover:bg-[#1E1E22] text-sm transition" data-tab="promos">
+          <span class="material-symbols-outlined text-[20px] text-zinc-400">confirmation_number</span>
+          <span>Promokodlar</span>
+        </button>
+        <button class="nav-tab-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-zinc-300 hover:text-white hover:bg-[#1E1E22] text-sm transition" data-tab="reviews">
+          <span class="material-symbols-outlined text-[20px] text-zinc-400">rate_review</span>
+          <span>Sharhlar nazorati</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Bottom Actions -->
+    <div class="p-3 border-t border-[#27272A] hidden md:block">
+      <a class="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-zinc-400 hover:text-white rounded-lg hover:bg-[#1E1E22] transition mb-1" href="/" target="_blank">
+        <span class="material-symbols-outlined text-[18px]">storefront</span>
+        <span>Do'konni ochish ↗</span>
+      </a>
+      <button class="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-red-400 hover:text-red-300 rounded-lg hover:bg-red-500/10 transition" id="admin-logout-btn" type="button">
+        <span class="material-symbols-outlined text-[18px]">logout</span>
+        <span>Chiqish</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ==========================================================================
+       MAIN ADMIN CONTENT AREA
+       ========================================================================== -->
+  <main class="flex-1 flex flex-col min-w-0 bg-[#0B0B0D] overflow-y-auto">
+    <!-- Top Bar -->
+    <header class="h-16 bg-[#111113] border-b border-[#27272A] px-6 flex items-center justify-between sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <h2 class="font-display font-bold text-lg text-white" id="admin-page-title">Boshqaruv Paneli</h2>
+        <span class="text-xs text-zinc-400 hidden sm:inline" id="admin-page-desc">· Asosiy statistika va do'kon faoliyati</span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button class="bg-gold hover:bg-gold-accent text-black font-display font-bold text-xs px-3 py-2 rounded-lg transition flex items-center gap-1.5 shadow-sm" id="btn-quick-new-product" type="button">
+          <span class="material-symbols-outlined text-[18px]">add</span>
+          <span>Yangi tovar</span>
+        </button>
+        <button class="p-2 rounded-lg bg-[#18181B] border border-[#27272A] text-zinc-300 hover:text-white" id="btn-refresh-dashboard" type="button" title="Yangilash">
+          <span class="material-symbols-outlined text-[20px]">refresh</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Page Body Container -->
+    <div class="p-6 max-w-7xl w-full mx-auto space-y-6">
+
+      <!-- KPI Bento Matrix (Always active on top) -->
+      <section class="grid grid-cols-2 lg:grid-cols-4 gap-4" id="kpi-matrix">
+        <!-- Stat 1: Revenue -->
+        <div class="bg-[#18181B] border border-[#27272A] p-4 rounded-xl flex flex-col justify-between">
+          <div class="flex items-center justify-between text-xs text-zinc-400 mb-2">
+            <span>Jami Savdo</span>
+            <span class="p-1.5 rounded-lg bg-[#2A2315] text-gold"><span class="material-symbols-outlined text-[18px]">payments</span></span>
+          </div>
+          <div>
+            <div class="font-display font-bold text-xl text-white tracking-tight" id="stat-revenue">0 so'm</div>
+            <div class="text-[11px] text-emerald-400 mt-1 flex items-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">trending_up</span>
+              <span>Faol buyurtmalar hisobida</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stat 2: Orders -->
+        <div class="bg-[#18181B] border border-[#27272A] p-4 rounded-xl flex flex-col justify-between">
+          <div class="flex items-center justify-between text-xs text-zinc-400 mb-2">
+            <span>Buyurtmalar</span>
+            <span class="p-1.5 rounded-lg bg-red-500/10 text-red-400"><span class="material-symbols-outlined text-[18px]">shopping_cart</span></span>
+          </div>
+          <div>
+            <div class="font-display font-bold text-xl text-white tracking-tight" id="stat-orders">0 ta</div>
+            <div class="text-[11px] text-amber-400 mt-1" id="stat-pending">0 ta kutilmoqda</div>
+          </div>
+        </div>
+
+        <!-- Stat 3: Users -->
+        <div class="bg-[#18181B] border border-[#27272A] p-4 rounded-xl flex flex-col justify-between">
+          <div class="flex items-center justify-between text-xs text-zinc-400 mb-2">
+            <span>Mijozlar Bazasi</span>
+            <span class="p-1.5 rounded-lg bg-blue-500/10 text-blue-400"><span class="material-symbols-outlined text-[18px]">group</span></span>
+          </div>
+          <div>
+            <div class="font-display font-bold text-xl text-white tracking-tight" id="stat-users">0</div>
+            <div class="text-[11px] text-zinc-400 mt-1">Ro'yxatdan o'tganlar</div>
+          </div>
+        </div>
+
+        <!-- Stat 4: Products -->
+        <div class="bg-[#18181B] border border-[#27272A] p-4 rounded-xl flex flex-col justify-between">
+          <div class="flex items-center justify-between text-xs text-zinc-400 mb-2">
+            <span>Ombordagi Tovarlar</span>
+            <span class="p-1.5 rounded-lg bg-purple-500/10 text-purple-400"><span class="material-symbols-outlined text-[18px]">inventory_2</span></span>
+          </div>
+          <div>
+            <div class="font-display font-bold text-xl text-white tracking-tight" id="stat-products">16 ta</div>
+            <div class="text-[11px] text-gold mt-1">9 ta futbol toifasida</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 1: DASHBOARD VIEW -->
+      <section class="admin-tab-pane space-y-6" id="pane-dashboard">
+        <div class="bg-[#18181B] border border-[#27272A] rounded-xl p-5">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-display font-bold text-base text-white flex items-center gap-2">
+              <span class="material-symbols-outlined text-gold text-[20px]">schedule</span>
+              <span>So'nggi Buyurtmalar</span>
+            </h3>
+            <button class="text-xs text-gold hover:underline font-semibold" onclick="document.querySelector('[data-tab=orders]').click();">Barchasini ko'rish →</button>
+          </div>
+          <div class="overflow-x-auto custom-scroll" id="dashboard-recent-orders">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: ORDERS VIEW -->
+      <section class="admin-tab-pane hidden space-y-4" id="pane-orders">
+        <!-- Filter and Search Toolbar -->
+        <div class="bg-[#18181B] border border-[#27272A] p-4 rounded-xl flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-1.5 overflow-x-auto pb-1" id="order-status-filters">
+            <button class="px-3 py-1.5 rounded-lg text-xs font-bold bg-gold text-black active-order-filter" data-status="all">Barchasi</button>
+            <button class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#111113] text-zinc-300 hover:bg-[#202024]" data-status="Yangi">Yangi</button>
+            <button class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#111113] text-zinc-300 hover:bg-[#202024]" data-status="Tasdiqlandi">Tasdiqlandi</button>
+            <button class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#111113] text-zinc-300 hover:bg-[#202024]" data-status="Yetkazilmoqda">Yetkazilmoqda</button>
+            <button class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#111113] text-zinc-300 hover:bg-[#202024]" data-status="Yetkazildi">Yetkazildi</button>
+            <button class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#111113] text-zinc-300 hover:bg-[#202024]" data-status="Bekor qilindi">Bekor qilindi</button>
+          </div>
+
+          <div class="relative w-full sm:w-64">
+            <span class="material-symbols-outlined text-[18px] text-zinc-400 absolute left-3 top-2.5">search</span>
+            <input class="w-full bg-[#111113] border border-[#27272A] focus:border-gold rounded-lg pl-9 pr-3 py-2 text-xs text-white outline-none" id="orders-search-input" type="text" placeholder="Buyurtma ID yoki mijoz..."/>
+          </div>
+        </div>
+
+        <div class="space-y-3" id="orders-list-container">
+          <!-- Populated via JS -->
+        </div>
+      </section>
+
+      <!-- TAB 3: PRODUCTS VIEW -->
+      <section class="admin-tab-pane hidden space-y-4" id="pane-products">
+        <div class="bg-[#18181B] border border-[#27272A] p-4 rounded-xl flex items-center justify-between gap-3">
+          <div class="relative flex-1 max-w-md">
+            <span class="material-symbols-outlined text-[18px] text-zinc-400 absolute left-3 top-2.5">search</span>
+            <input class="w-full bg-[#111113] border border-[#27272A] focus:border-gold rounded-lg pl-9 pr-3 py-2 text-xs text-white outline-none" id="products-search-input" type="text" placeholder="Artikul yoki tovar nomi..."/>
+          </div>
+          <button class="btn-primary bg-gold text-black font-display font-bold text-xs px-3.5 py-2 rounded-lg flex items-center gap-1.5" id="btn-add-product" type="button">
+            <span class="material-symbols-outlined text-[18px]">add</span>
+            <span>+ Yangi tovar qo'shish</span>
+          </button>
+        </div>
+
+        <div class="bg-[#18181B] border border-[#27272A] rounded-xl overflow-hidden shadow-sm">
+          <div class="overflow-x-auto custom-scroll">
+            <table class="w-full text-left text-xs text-zinc-300">
+              <thead class="bg-[#111113] text-zinc-400 uppercase text-[10px] font-bold border-b border-[#27272A]">
+                <tr>
+                  <th class="p-3">Rasm</th>
+                  <th class="p-3">Artikul</th>
+                  <th class="p-3">Tovar nomi</th>
+                  <th class="p-3">Toifa</th>
+                  <th class="p-3">Brend</th>
+                  <th class="p-3">Narxi (saytda)</th>
+                  <th class="p-3">Qoldiq</th>
+                  <th class="p-3 text-right">Amallar</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[#27272A]" id="products-table-body">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: USERS VIEW -->
+      <section class="admin-tab-pane hidden space-y-4" id="pane-users">
+        <div class="bg-[#18181B] border border-[#27272A] p-4 rounded-xl flex items-center justify-between gap-3">
+          <div class="relative flex-1 max-w-md">
+            <span class="material-symbols-outlined text-[18px] text-zinc-400 absolute left-3 top-2.5">search</span>
+            <input class="w-full bg-[#111113] border border-[#27272A] focus:border-gold rounded-lg pl-9 pr-3 py-2 text-xs text-white outline-none" id="users-search-input" type="text" placeholder="Ism yoki telefon..."/>
+          </div>
+          <span class="text-xs text-zinc-400" id="users-count-label">0 mijoz ro'yxatda</span>
+        </div>
+
+        <div class="bg-[#18181B] border border-[#27272A] rounded-xl overflow-hidden shadow-sm">
+          <div class="overflow-x-auto custom-scroll">
+            <table class="w-full text-left text-xs text-zinc-300">
+              <thead class="bg-[#111113] text-zinc-400 uppercase text-[10px] font-bold border-b border-[#27272A]">
+                <tr>
+                  <th class="p-3">ID</th>
+                  <th class="p-3">Mijoz ismi</th>
+                  <th class="p-3">Telefon</th>
+                  <th class="p-3">A'zolik sanasi</th>
+                  <th class="p-3">Buyurtmalar soni</th>
+                  <th class="p-3 text-right">Holati / Amal</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[#27272A]" id="users-table-body">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 5: PROMOS VIEW -->
+      <section class="admin-tab-pane hidden space-y-4" id="pane-promos">
+        <div class="bg-[#18181B] border border-[#27272A] p-4 rounded-xl flex items-center justify-between gap-3">
+          <div>
+            <h3 class="font-display font-bold text-sm text-white">Promokodlar tizimi</h3>
+            <p class="text-[11px] text-zinc-400">400 mingdan oshganda 50 ming, 800 mingdan oshganda 100 ming so'm avtomatik chegirma</p>
+          </div>
+          <button class="bg-gold text-black font-display font-bold text-xs px-3.5 py-2 rounded-lg flex items-center gap-1.5" id="btn-add-promo" type="button">
+            <span class="material-symbols-outlined text-[18px]">add</span>
+            <span>+ Yangi promokod</span>
+          </button>
+        </div>
+
+        <div class="bg-[#18181B] border border-[#27272A] rounded-xl overflow-hidden shadow-sm">
+          <div class="overflow-x-auto custom-scroll">
+            <table class="w-full text-left text-xs text-zinc-300">
+              <thead class="bg-[#111113] text-zinc-400 uppercase text-[10px] font-bold border-b border-[#27272A]">
+                <tr>
+                  <th class="p-3">Promokod</th>
+                  <th class="p-3">Holati</th>
+                  <th class="p-3">Amal qilish muddati</th>
+                  <th class="p-3">Foydalanish / Limit</th>
+                  <th class="p-3 text-right">Amallar</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[#27272A]" id="promos-table-body">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 6: REVIEWS VIEW -->
+      <section class="admin-tab-pane hidden space-y-4" id="pane-reviews">
+        <div class="bg-[#18181B] border border-[#27272A] p-4 rounded-xl">
+          <h3 class="font-display font-bold text-sm text-white mb-1">Mijozlar Sharhlari Moderatsiyasi</h3>
+          <p class="text-[11px] text-zinc-400">TZ qoidasiga ko'ra admin faqat nomaqbul sharhlarni yashirishi yoki o'chirishi mumkin.</p>
+        </div>
+
+        <div class="space-y-3" id="reviews-list-container">
+          <!-- Populated via JS -->
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ==========================================================================
+       ADMIN MODAL CONTAINER
+       ========================================================================== -->
+  <div class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden" id="admin-modal-layer">
+    <div class="bg-[#18181B] border border-[#27272A] rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 relative shadow-2xl custom-scroll" id="admin-modal-sheet">
+      <button class="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#111113] border border-[#27272A] text-zinc-400 hover:text-white flex items-center justify-center transition" id="admin-modal-close-btn" type="button">
+        <span class="material-symbols-outlined text-[18px]">close</span>
+      </button>
+      <div id="admin-modal-content">
+        <!-- Rendered dynamically via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="fixed bottom-6 right-6 z-50 bg-[#1C1C1F] border border-gold/40 text-white text-xs font-semibold px-4 py-3 rounded-lg shadow-xl opacity-0 pointer-events-none transition-all duration-300" id="admin-toast"></div>
+
+</body>
+</html>

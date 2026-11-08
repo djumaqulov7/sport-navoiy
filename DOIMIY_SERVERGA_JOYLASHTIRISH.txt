@@ -1,0 +1,38 @@
+======================================================================
+   sport.NAVOIY — 24/7 DOIMIY ISHLAYDIGAN SERVERGA JOYLASHTIRISH QO'LLANMASI
+======================================================================
+
+Siz kompyuteringizni o'chirib qo'ysangiz ham, mijozingiz uchun sayt 
+va admin panel 24 soat tinimsiz ishlab turishi uchun eng oson 2 ta bepul yo'l:
+
+----------------------------------------------------------------------
+1-YO'L: RENDER.COM (Tavsiya etiladi - 100% Bepul va Oson)
+----------------------------------------------------------------------
+1. https://render.com saytiga kiring va "Get Started" (Google hisobingiz bilan) bosing.
+2. "New +" tugmasini bosib "Web Service" ni tanlang.
+3. Loyihani yuklash:
+   - "Deploy from Git repository" yoki
+   - Barcha fayllarni GitHub'ga yuklab ulab qo'yasiz.
+4. Render avtomatik ravishda tayyorlab qo'yilgan Dockerfile va render.yaml fayllarini 
+   aniqlaydi va saytni ishga tushiradi!
+5. Natijada sizga doimiy havola beriladi:
+   Masalan: https://sport-navoiy.onrender.com
+   Admin:   https://sport-navoiy.onrender.com/admin
+
+----------------------------------------------------------------------
+2-YO'L: PYTHONANYWHERE.COM (Faylni to'g'ridan-to'g'ri yuklash)
+----------------------------------------------------------------------
+1. https://www.pythonanywhere.com saytida bepul ro'yxatdan o'ting.
+2. "Files" bo'limiga kiring va papkangizdagi tayyor:
+   "sport_navoiy_deploy.zip" (21 MB) faylini yuklang.
+3. "Open Bash console here" tugmasini bosib, "unzip sport_navoiy_deploy.zip" deb yozing.
+4. "Web" bo'limidan saytingizni ishga tushiring.
+5. Saytingiz: https://sizning_loginingiz.pythonanywhere.com manzilida 24/7 ishlaydi!
+
+----------------------------------------------------------------------
+Tayyorlangan deploy fayllari (Papkangizda mavjud):
+• Dockerfile — universal bulutli konteyner
+• render.yaml — Render.com uchun avtomatik konfiguratsiya
+• Procfile — server start komandasi
+• sport_navoiy_deploy.zip — barcha tovar rasmlari va kodlar arxivi
+======================================================================

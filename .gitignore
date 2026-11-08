@@ -1,0 +1,8 @@
+dizayn/
+admin_dizayn/
+tools/
+*.exe
+*.zip
+*.log
+__pycache__/
+*.pyc

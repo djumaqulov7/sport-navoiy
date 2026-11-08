@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: sport-navoiy
+    env: python
+    buildCommand: ""
+    startCommand: "python server.py"
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 10000

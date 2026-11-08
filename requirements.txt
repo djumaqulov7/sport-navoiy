@@ -1,0 +1,3 @@
+# sport.NAVOIY requirements
+# Loyiha standart Python kutubxonalari (sqlite3, http.server, hashlib) asosida yozilgan.
+# Tashqi kutubxonalar talab etilmaydi.

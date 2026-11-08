@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0"/>
+  <meta name="theme-color" content="#0B0B0D"/>
+  <meta name="description" content="sport.NAVOIY — Rasmiy Kelme dileri. Original futbol formalari, butsilar, mashg'ulot kiyimlari va to'plar. Butun O'zbekiston bo'ylab BTS Express yetkazib berish."/>
+  <meta property="og:title" content="sport.NAVOIY — Futbol Ekipirovkasi Markazi"/>
+  <meta property="og:description" content="Faqat original futbol tovarlari. 400 000 so'mdan oshganda 50 000 so'm chegirma!"/>
+  <meta property="og:type" content="website"/>
+  <title>sport.NAVOIY — Futbol Onlayn Do'koni | Kelme Rasmiy Dileri</title>
+
+  <!-- Favicon & PWA App Manifest -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="sport.NAVOIY"/>
+  <link rel="apple-touch-icon" href="icon-192.png"/>
+
+  <!-- Google Fonts: Inter & Space Grotesk & Material Symbols -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css"/>
+
+  <!-- Tailwind CDN with Design System Config -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "gold": "#D4AF37",
+            "gold-hover": "#E5BE45",
+            "gold-light": "rgba(212, 175, 55, 0.12)",
+            "dark-bg": "#0B0B0D",
+            "dark-surface": "#17171A",
+            "border-dark": "#27272A"
+          },
+          fontFamily: {
+            display: ["'Space Grotesk'", "sans-serif"],
+            body: ["'Inter'", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Embedded Products Data for instant/offline loading -->
+  <script src="products_data.js"></script>
+
+  <!-- Main Application Logic -->
+  <script src="app.js" defer></script>
+</head>
+<body class="antialiased">
+
+  <!-- ==========================================================================
+       SITE HEADER
+       ========================================================================== -->
+  <header class="site-header">
+    <!-- Top Announcement Line -->
+    <div class="topline">
+      <div class="wrap topline-inner">
+        <div class="top-left">
+          <a class="top-phone" href="tel:+998507840513" title="Qo'ng'iroq qilish">
+            <span class="material-symbols-outlined text-[16px]">call</span>
+            <span>+998 50 784 05 13</span>
+          </a>
+          <span class="top-shipping">
+            <span class="material-symbols-outlined text-[16px]">local_shipping</span>
+            <span data-i18n="topShipping">BTS Express bo'ylab butun O'zbekiston</span>
+          </span>
+          <button id="pwa-install-btn" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gold text-[#0B0B0D] hover:bg-gold-hover text-xs font-bold transition shadow-sm cursor-pointer" type="button" title="Telefoningizga ilova sifatida o'rnatish">
+            <span class="material-symbols-outlined text-[16px]">install_mobile</span>
+            <span>Ilovani o'rnatish</span>
+          </button>
+        </div>
+        <div class="top-controls">
+          <div class="lang-selector">
+            <span class="material-symbols-outlined text-[15px]">language</span>
+            <select id="lang-select" aria-label="Til tanlash">
+              <option value="uz">UZB</option>
+              <option value="ru">RUS</option>
+              <option value="en">ENG</option>
+            </select>
+          </div>
+          <button class="theme-toggle" id="theme-toggle-btn" type="button" aria-label="Mavzuni almashtirish">
+            <span class="material-symbols-outlined text-[16px]" id="theme-icon">dark_mode</span>
+            <span id="theme-label" data-i18n="themeLabel">Rejim</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Header Bar -->
+    <div class="wrap main-header">
+      <!-- Brand Logo -->
+      <a class="brand-link" href="/" aria-label="sport.NAVOIY bosh sahifa">
+        <img class="brand-logo-img" src="logo.svg" alt="sport.NAVOIY D&A SPORT KELME"/>
+      </a>
+
+      <!-- Live Search with Category Selector -->
+      <div class="header-search">
+        <select class="search-category-select" id="search-cat-filter" aria-label="Toifalar">
+          <option value="" data-i18n="allCategories">Barcha toifalar</option>
+        </select>
+        <input class="search-input" id="search-input" type="search" placeholder="Mahsulot nomi, to'plam yoki artikul..." aria-label="Mahsulot qidirish"/>
+        <button class="search-submit-btn" id="search-btn" type="button" aria-label="Qidirish">
+          <span class="material-symbols-outlined text-[18px]">search</span>
+        </button>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="header-actions">
+        <!-- Wishlist Button -->
+        <button class="action-btn wishlist-open" type="button" aria-label="Sevimlilar">
+          <span class="material-symbols-outlined text-[22px]">favorite</span>
+          <span class="action-badge badge-danger" id="wishlist-badge">0</span>
+          <span class="btn-label" data-i18n="wishlist">Sevimlilar</span>
+        </button>
+
+        <!-- Cart Button -->
+        <button class="action-btn cart-open" type="button" aria-label="Savat">
+          <span class="material-symbols-outlined text-[22px]">shopping_bag</span>
+          <span class="action-badge" id="cart-badge">0</span>
+          <div class="cart-summary-text">
+            <span class="cart-summary-label" data-i18n="cart">Savat</span>
+            <span class="cart-summary-price" id="cart-total-preview">0 so'm</span>
+          </div>
+        </button>
+
+        <!-- User Profile Button -->
+        <button class="action-btn account-open" type="button" aria-label="Profil">
+          <span class="material-symbols-outlined text-[22px]">account_circle</span>
+          <span class="btn-label" id="user-btn-label" data-i18n="login">Kirish</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 9 Categories Navigation Bar -->
+    <div class="category-nav-bar">
+      <div class="wrap category-nav-inner" id="category-pills">
+        <!-- Rendered dynamically via JavaScript -->
+      </div>
+    </div>
+
+    <!-- Mobile Search Strip -->
+    <div class="mobile-search-strip">
+      <div class="wrap">
+        <div class="header-search" style="display: flex; max-width: 100%;">
+          <input class="search-input" id="search-input-mobile" type="search" placeholder="Mahsulot nomi yoki artikul..."/>
+          <button class="search-submit-btn" type="button">
+            <span class="material-symbols-outlined text-[18px]">search</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       MAIN PAGE CONTENT
+       ========================================================================== -->
+  <main class="w-full flex-1">
+
+    <!-- 1. HERO SHOWCASE SECTION -->
+    <section class="hero-section">
+      <div class="wrap">
+        <div class="hero-card">
+          <div class="hero-content">
+            <div class="hero-badge">
+              <span class="hero-live-dot"></span>
+              <span data-i18n="heroBadge">Kelme Rasmiy Distribyutori</span>
+            </div>
+            <h1 class="hero-title" data-i18n="heroTitle">
+              KELME &amp; MILLIY TERMA JAMOA — <span class="gold-text">YANGI MAVSUM</span> TO'PLAMI
+            </h1>
+            <p class="hero-description" data-i18n="heroDescription">
+              Professional futbol ekipirovkalari, rasmiy match-to'plar va mashg'ulot vositalari. 400 000 so'mdan ortiq xarid uchun <strong style="color:var(--gold);">50 000 so'm</strong>, 800 000 so'mdan ortiq uchun <strong style="color:var(--gold);">100 000 so'm</strong> chegirma avtomatik qo'llanadi!
+            </p>
+            <div class="hero-actions">
+              <a class="btn-primary" href="#catalog">
+                <span data-i18n="heroCta1">Katalogni ko'rish</span>
+                <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+              </a>
+              <button class="btn-secondary" id="hero-kits-btn" type="button">
+                <span class="material-symbols-outlined text-[18px]">sports_soccer</span>
+                <span data-i18n="heroCta2">Klub formalari</span>
+              </button>
+            </div>
+            <div class="hero-features">
+              <div class="hero-feat-item">
+                <span class="material-symbols-outlined">local_shipping</span>
+                <span>BTS Express yetkazib berish</span>
+              </div>
+              <div class="hero-feat-item">
+                <span class="material-symbols-outlined">verified</span>
+                <span>100% Original mahsulotlar</span>
+              </div>
+              <div class="hero-feat-item">
+                <span class="material-symbols-outlined">handshake</span>
+                <span>Yetkazilganda to'lov (Naqd)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hero Visual Feature Slot -->
+          <div class="hero-visual">
+            <div class="hero-visual-card" id="hero-featured-card">
+              <span class="hero-card-tag">TOP MODEL · KELME</span>
+              <img class="hero-visual-img" id="hero-featured-img" src="../450-ming%20somlik%20butsilar/main_premium_450k.png" alt="Kelme Butsi"/>
+              <div class="hero-card-price" id="hero-featured-price">449 999 so'm</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. BENTO-STYLE 9 FOOTBALL CATEGORIES -->
+    <section class="bento-section">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="head-subtitle" data-i18n="bentoSubtitle">To'liq sport ekipirovkasi</div>
+            <h2 class="head-title" data-i18n="bentoTitle">Futbol Toifalari</h2>
+          </div>
+          <a class="btn-secondary text-[12px] py-1 px-3" href="#catalog" data-i18n="viewAll">Barchasi →</a>
+        </div>
+
+        <div class="bento-grid" id="bento-category-grid">
+          <!-- 1. Formalar -->
+          <div class="bento-item" data-category="Futbol formalari">
+            <div class="bento-icon"><span class="material-symbols-outlined text-[28px]">sports_soccer</span></div>
+            <div class="bento-info">
+              <div class="bento-name" data-i18n="cat1">Futbol formalari</div>
+              <div class="bento-desc" data-i18n="cat1Desc">Klublar va milliy terma jamoalar</div>
+            </div>
+          </div>
+          <!-- 2. Futbolka va shortiklar -->
+          <div class="bento-item" data-category="Futbolka va shortiklar">
+            <div class="bento-icon"><span class="material-symbols-outlined text-[28px]">apparel</span></div>
+            <div class="bento-info">
+              <div class="bento-name" data-i18n="cat2">Futbolka va shortiklar</div>
+              <div class="bento-desc" data-i18n="cat2Desc">Havo o'tkazuvchi mikrofibra kiyimlar</div>
+            </div>
+          </div>
+          <!-- 3. Getrlar / paypoqlar -->
+          <div class="bento-item" data-category="Futbol getrlari / paypoqlar">
+            <div class="bento-icon"><span class="material-symbols-outlined text-[28px]">roller_skating</span></div>
+            <div class="bento-info">
+              <div class="bento-name" data-i18n="cat3">Futbol getrlari / paypoqlar</div>
+              <div class="bento-desc" data-i18n="cat3Desc">Kompressorli getrlar va paypoqlar</div>
+            </div>
+          </div>
+          <!-- 4. Mashg'ulot kiyimlari -->
+          <div class="bento-item" data-category="Mashg‘ulot kiyimlari">
+            <div class="bento-icon"><span class="material-symbols-outlined text-[28px]">fitness_center</span></div>
+            <div class="bento-info">
+              <div class="bento-name" data-i18n="cat4">Mashg‘ulot kiyimlari</div>
+              <div class="bento-desc" data-i18n="cat4Desc">Sportivka, kurtka va trikolar</div>
+            </div>
+          </div>
+          <!-- 5. Darvozabon kiyimlari -->
+          <div class="bento-item" data-category="Darvozabon kiyimlari va qo‘lqoplari">
+            <div class="bento-icon"><span class="material-symbols-outlined text-[28px]">sports_handball</span></div>
+            <div class="bento-info">
+              <div class="bento-name" data-i18n="cat5">Darvozabon vositalari</div>
+              <div class="bento-desc" data-i18n="cat5Desc">Himoya kiyimlari va qo'lqoplar</div>
+            </div>
+          </div>
+          <!-- 6. Butsilar va krossovkalar -->
+          <div class="bento-item" data-category="Futbol butsalari va krossovkalari">
+            <div class="bento-icon"><span class="material-symbols-outlined text-[28px]">sprint</span></div>
+            <div class="bento-info">
+              <div class="bento-name" data-i18n="cat6">Butsa va krossovkalar</div>
+              <div class="bento-desc" data-i18n="cat6Desc">Turf, futzal va maydon butsalari</div>
+            </div>
+          </div>
+          <!-- 7. Himoya vositalari -->
+          <div class="bento-item" data-category="Himoya vositalari">
+            <div class="bento-icon"><span class="material-symbols-outlined text-[28px]">shield</span></div>
+            <div class="bento-info">
+              <div class="bento-name" data-i18n="cat7">Himoya vositalari</div>
+              <div class="bento-desc" data-i18n="cat7Desc">Shchitoklar va bo'g'im himoyachilari</div>
+            </div>
+          </div>
+          <!-- 8. Futbol to'plari -->
+          <div class="bento-item" data-category="Futbol to‘plari">
+            <div class="bento-icon"><span class="material-symbols-outlined text-[28px]">sports_soccer</span></div>
+            <div class="bento-info">
+              <div class="bento-name" data-i18n="cat8">Futbol to'plari</div>
+              <div class="bento-desc" data-i18n="cat8Desc">Match va mashg'ulot to'plari</div>
+            </div>
+          </div>
+          <!-- 9. Aksessuarlar -->
+          <div class="bento-item" data-category="Aksessuarlar">
+            <div class="bento-icon"><span class="material-symbols-outlined text-[28px]">backpack</span></div>
+            <div class="bento-info">
+              <div class="bento-name" data-i18n="cat9">Aksessuarlar</div>
+              <div class="bento-desc" data-i18n="cat9Desc">Sumka, kepka va sardor lentalari</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. TRUST STRIP -->
+    <section class="trust-section">
+      <div class="wrap">
+        <div class="trust-grid">
+          <div class="trust-box">
+            <div class="trust-icon-wrap"><span class="material-symbols-outlined text-[22px]">verified</span></div>
+            <div>
+              <div class="trust-title" data-i18n="trust1Title">100% Original Mahsulot</div>
+              <div class="trust-desc" data-i18n="trust1Desc">Kelme va Jako rasmiy ta'minoti</div>
+            </div>
+          </div>
+          <div class="trust-box">
+            <div class="trust-icon-wrap"><span class="material-symbols-outlined text-[22px]">local_shipping</span></div>
+            <div>
+              <div class="trust-title" data-i18n="trust2Title">BTS Express Yetkazish</div>
+              <div class="trust-desc" data-i18n="trust2Desc">O'zbekistonning barcha viloyatlariga</div>
+            </div>
+          </div>
+          <div class="trust-box">
+            <div class="trust-icon-wrap"><span class="material-symbols-outlined text-[22px]">savings</span></div>
+            <div>
+              <div class="trust-title" data-i18n="trust3Title">-1 So'm Kafolati</div>
+              <div class="trust-desc" data-i18n="trust3Desc">Har bir narx yaxlit summadan 1 so'm kam</div>
+            </div>
+          </div>
+          <div class="trust-box">
+            <div class="trust-icon-wrap"><span class="material-symbols-outlined text-[22px]">handshake</span></div>
+            <div>
+              <div class="trust-title" data-i18n="trust4Title">Xavfsiz To'lov</div>
+              <div class="trust-desc" data-i18n="trust4Desc">Mahsulotni qo'lga olganda naqd to'lash</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PRODUCT CATALOG SECTION WITH STICKY FILTER SIDEBAR -->
+    <section class="catalog-section" id="catalog">
+      <div class="wrap">
+        <!-- Catalog Header Banner -->
+        <div class="catalog-banner">
+          <div class="catalog-banner-text">
+            <span class="head-subtitle" data-i18n="catalogSubtitle">Ekipirovka Markazi · Navoiy</span>
+            <h2 data-i18n="catalogTitle">Futbol Mahsulotlari Katalogi</h2>
+            <p data-i18n="catalogBannerDesc">Professional futbolchilar, havaskorlar va jamoalar uchun sifatli futbol jihozlari.</p>
+          </div>
+          <div class="catalog-stats-pill" id="catalog-count-pill">
+            16 ta mahsulot
+          </div>
+        </div>
+
+        <!-- Main Layout: Filters Sidebar + Grid -->
+        <div class="catalog-layout">
+
+          <!-- Left Sticky Sidebar Filters -->
+          <aside class="filter-sidebar" id="filter-sidebar">
+            <div class="filter-sidebar-head">
+              <div class="filter-sidebar-title">
+                <span class="material-symbols-outlined text-[20px] text-gold">tune</span>
+                <span data-i18n="filters">Filtrlar</span>
+              </div>
+              <button class="filter-reset-btn" id="filter-reset-btn" type="button" data-i18n="reset">Tozalash</button>
+            </div>
+
+            <!-- Category Filter -->
+            <div class="filter-group">
+              <div class="filter-group-title" data-i18n="filterCategories">Kategoriyalar</div>
+              <div class="filter-list" id="category-filter-list">
+                <!-- Populated via JS -->
+              </div>
+            </div>
+
+            <!-- Brand Filter -->
+            <div class="filter-group">
+              <div class="filter-group-title" data-i18n="filterBrands">Brend</div>
+              <div class="filter-list" id="brand-filter-list">
+                <!-- Populated via JS -->
+              </div>
+            </div>
+
+            <!-- Availability Filter -->
+            <div class="filter-group">
+              <div class="filter-group-title" data-i18n="filterStock">Mavjudlik</div>
+              <label class="filter-label">
+                <span class="filter-label-left">
+                  <input type="checkbox" id="filter-stock-only"/>
+                  <span data-i18n="inStockOnly">Faqat omborda borlar</span>
+                </span>
+              </label>
+            </div>
+
+            <!-- Price Range Filter -->
+            <div class="filter-group">
+              <div class="filter-group-title" data-i18n="filterPrice">Narx oralig'i (so'm)</div>
+              <div class="price-inputs">
+                <input class="price-field" id="filter-price-min" type="number" placeholder="Min" min="0" step="10000"/>
+                <span style="color:var(--text-muted);">—</span>
+                <input class="price-field" id="filter-price-max" type="number" placeholder="Max" min="0" step="10000"/>
+              </div>
+            </div>
+
+            <!-- Close button on mobile -->
+            <button class="btn-primary w-full mt-4 md:hidden" id="mobile-filter-close-btn" type="button" data-i18n="applyFilters">
+              Filtrlarni qo'llash
+            </button>
+          </aside>
+
+          <!-- Right Products Content -->
+          <div class="catalog-main">
+            <!-- Toolbar -->
+            <div class="catalog-toolbar">
+              <button class="mobile-filter-trigger" id="mobile-filter-open-btn" type="button">
+                <span class="material-symbols-outlined text-[18px]">tune</span>
+                <span data-i18n="filterBtn">Filtrlash</span>
+              </button>
+
+              <div class="catalog-toolbar-right">
+                <div class="sort-select-wrap">
+                  <span class="material-symbols-outlined text-[18px] text-muted">sort</span>
+                  <label for="catalog-sort" class="sr-only">Saralash</label>
+                  <select id="catalog-sort">
+                    <option value="new" data-i18n="sortNew">Yangi kelganlar</option>
+                    <option value="low" data-i18n="sortLow">Narx: arzondan qimmatga</option>
+                    <option value="high" data-i18n="sortHigh">Narx: qimmatdan arzonga</option>
+                    <option value="popular" data-i18n="sortPopular">Ommabopligi bo'yicha</option>
+                  </select>
+                </div>
+
+                <div class="view-mode-buttons" id="view-mode-toggles">
+                  <button class="view-btn active" id="btn-col-3" type="button" title="3 ustun">
+                    <span class="material-symbols-outlined text-[20px]">grid_view</span>
+                  </button>
+                  <button class="view-btn" id="btn-col-4" type="button" title="4 ustun">
+                    <span class="material-symbols-outlined text-[20px]">view_comfy</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="product-grid" id="products-grid">
+              <!-- Dynamically populated via JS -->
+              <div class="col-span-full py-16 text-center text-secondary">
+                Mahsulotlar yuklanmoqda…
+              </div>
+            </div>
+
+            <!-- Empty State -->
+            <div class="hidden py-16 text-center" id="catalog-empty">
+              <span class="material-symbols-outlined text-[48px] text-gold mb-2">search_off</span>
+              <h3 class="font-display font-bold text-lg mb-1" data-i18n="emptyTitle">Mahsulot topilmadi</h3>
+              <p class="text-secondary text-sm mb-4" data-i18n="emptyDesc">Qidiruv yoki filtrlarni o'zgartirib ko'ring.</p>
+              <button class="btn-secondary" id="reset-empty-btn" type="button" data-i18n="resetFilters">Barcha filtrlarni tozalash</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. PROMO DISCOUNT BAND -->
+    <section class="promo-band-section">
+      <div class="wrap">
+        <div class="promo-band-card">
+          <div class="promo-band-copy">
+            <span class="head-subtitle" style="color:var(--gold);" data-i18n="promoCardSub">Maxsus Promokod Aksiyasi</span>
+            <h3 data-i18n="promoCardTitle">400 000 so'mdan oshganda 50 000 so'm chegirma!</h3>
+            <p data-i18n="promoCardDesc">800 000 so'mdan ortiq xarid uchun to'liq 100 000 so'm tejab qoling. Promokodni savatda kiriting.</p>
+          </div>
+          <div class="promo-code-pill">
+            <span class="material-symbols-outlined text-[20px]">confirmation_number</span>
+            <span>YANGI2026</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. ABOUT & CONTACT SECTION -->
+    <section class="about-contact-section" id="about">
+      <div class="wrap">
+        <div class="about-grid">
+          <!-- About Store -->
+          <div class="about-box">
+            <span class="head-subtitle" data-i18n="aboutSub">Biz haqimizda</span>
+            <h3 data-i18n="aboutTitle">sport.NAVOIY — Futbol Ishtiyoqi Markazi</h3>
+            <p data-i18n="aboutText">
+              Do'konimiz faqat futbolga ixtisoslashgan bo'lib, professional Kelme va Jako brendlarining eng sifatli futbol formalari, butsilar, sarakanoshkalar, mashg'ulot kiyimlari va to'plarini taqdim etadi. Har bir mahsulot haqiqiy o'yinchilar talabiga javob beradi.
+            </p>
+            <div class="contact-info-list">
+              <div class="contact-info-item">
+                <span class="material-symbols-outlined">call</span>
+                <span><strong>Telefon:</strong> <a class="hover:text-gold" href="tel:+998507840513">+998 50 784 05 13</a></span>
+              </div>
+              <div class="contact-info-item">
+                <span class="material-symbols-outlined">location_on</span>
+                <span><strong>Manzil:</strong> O'zbekiston, Navoiy shahri, Markaziy sport kompleksi</span>
+              </div>
+              <div class="contact-info-item">
+                <span class="material-symbols-outlined">schedule</span>
+                <span><strong>Ish vaqti:</strong> Har kuni 09:00 dan 20:00 gacha</span>
+              </div>
+              <div class="contact-info-item">
+                <span class="material-symbols-outlined">local_shipping</span>
+                <span><strong>Yetkazib berish:</strong> BTS Express orqali butun respublikaga 1-3 kun</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact / Feedback Form -->
+          <div class="about-box" id="contact">
+            <span class="head-subtitle" data-i18n="contactSub">Aloqa Formasi</span>
+            <h3 data-i18n="contactTitle">Do'kon Bilan Bog'lanish</h3>
+            <p data-i18n="contactText">Savollaringiz yoki jamoaviy buyurtmalaringiz bo'lsa xabar qoldiring. Xabar Telegram botimizga darhol yetkaziladi.</p>
+
+            <form class="contact-form" id="contact-form">
+              <div class="form-field">
+                <label data-i18n="yourName">Ismingiz</label>
+                <input name="name" type="text" placeholder="Masalan: Sardor Rahimov" required minlength="2"/>
+              </div>
+              <div class="form-field">
+                <label data-i18n="yourPhone">Telefon raqamingiz</label>
+                <input name="phone" type="tel" placeholder="+998 90 123 45 67" required/>
+              </div>
+              <div class="form-field">
+                <label data-i18n="yourMessage">Xabar matni</label>
+                <textarea name="message" rows="3" placeholder="Savol yoki kerakli tovar haqida yozing..." required minlength="3"></textarea>
+              </div>
+              <button class="btn-primary mt-2" type="submit">
+                <span class="material-symbols-outlined text-[18px]">send</span>
+                <span data-i18n="sendMessage">Xabarni yuborish</span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================================================
+       SITE FOOTER
+       ========================================================================== -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <img class="brand-logo-img mb-3" src="logo.svg" alt="sport.NAVOIY"/>
+          <p style="color:var(--text-secondary); max-width: 280px; font-size: 12px; line-height: 1.6;">
+            O'zbekistondagi yetakchi futbol ekipirovkasi markazi. Kelme va Jako rasmiy ta'minoti. Barcha narxlar 1 so'm kam qoidasida.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4 data-i18n="footerNav">Bo'limlar</h4>
+          <div class="footer-links">
+            <a href="#catalog" data-i18n="navCatalog">Katalog</a>
+            <a href="#about" data-i18n="navAbout">Biz haqimizda</a>
+            <a href="#contact" data-i18n="navContact">Aloqa</a>
+            <button class="text-left hover:text-gold" id="footer-delivery-btn" type="button" data-i18n="footerDelivery">Yetkazib berish va to'lov</button>
+            <button class="text-left hover:text-gold" id="footer-privacy-btn" type="button" data-i18n="footerPrivacy">Maxfiylik siyosati</button>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4 data-i18n="footerCategories">Top Toifalar</h4>
+          <div class="footer-links">
+            <a href="#catalog" data-filter-cat="Futbol formalari">Futbol formalari</a>
+            <a href="#catalog" data-filter-cat="Futbol butsalari va krossovkalari">Butsa va poyabzallar</a>
+            <a href="#catalog" data-filter-cat="Mashg‘ulot kiyimlari">Mashg'ulot kiyimlari</a>
+            <a href="#catalog" data-filter-cat="Aksessuarlar">Sport sumkalari</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4 data-i18n="footerContact">Bog'lanish</h4>
+          <div class="footer-links">
+            <a class="flex items-center gap-2" href="tel:+998507840513">
+              <span class="material-symbols-outlined text-gold text-[16px]">call</span>
+              <span>+998 50 784 05 13</span>
+            </a>
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-gold text-[16px]">location_on</span>
+              <span>Navoiy shahri, O'zbekiston</span>
+            </div>
+            <div class="mt-2 text-xs text-secondary">
+              Telegram: <a class="text-gold font-semibold" href="https://t.me/sportnavoiy" target="_blank" rel="noopener">@sportnavoiy</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 sport.NAVOIY. Barcha huquqlar himoyalangan. D&amp;A SPORT KELME.</div>
+        <div class="flex items-center gap-4">
+          <span>Futbol ruhi bilan yaratilgan</span>
+          <a class="text-secondary hover:text-gold text-xs" href="/admin" title="Admin Boshqaruv">Admin</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       MOBILE BOTTOM DOCK NAVIGATION
+       ========================================================================== -->
+  <nav class="mobile-dock" aria-label="Mobil menyu">
+    <button class="dock-btn active" id="dock-home-btn" type="button">
+      <span class="material-symbols-outlined text-[22px]">home</span>
+      <span data-i18n="dockHome">Bosh sahifa</span>
+    </button>
+    <button class="dock-btn" id="dock-catalog-btn" type="button">
+      <span class="material-symbols-outlined text-[22px]">category</span>
+      <span data-i18n="dockCatalog">Katalog</span>
+    </button>
+    <button class="dock-btn" id="dock-cart-btn" type="button">
+      <span class="material-symbols-outlined text-[22px]">shopping_bag</span>
+      <span class="dock-badge" id="dock-cart-badge">0</span>
+      <span data-i18n="dockCart">Savat</span>
+    </button>
+    <button class="dock-btn" id="dock-install-btn" type="button" style="color:var(--gold);">
+      <span class="material-symbols-outlined text-[22px]">install_mobile</span>
+      <span>Ilova</span>
+    </button>
+    <button class="dock-btn" id="dock-account-btn" type="button">
+      <span class="material-symbols-outlined text-[22px]">account_circle</span>
+      <span data-i18n="dockAccount">Kabinet</span>
+    </button>
+  </nav>
+
+  <!-- ==========================================================================
+       MODAL SYSTEM BACKDROP & CONTAINER
+       ========================================================================== -->
+  <div class="modal-backdrop" id="main-modal-layer" role="dialog" aria-modal="true">
+    <div class="modal-sheet" id="main-modal-sheet">
+      <button class="modal-close-btn" id="modal-close-btn" type="button" aria-label="Yopish">
+        <span class="material-symbols-outlined text-[20px]">close</span>
+      </button>
+      <div id="modal-body">
+        <!-- Rendered dynamically via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Message -->
+  <div class="toast-msg" id="toast-msg" role="status" aria-live="polite"></div>
+
+</body>
+</html>

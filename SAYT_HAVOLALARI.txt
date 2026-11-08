@@ -1,0 +1,25 @@
+==================================================
+   sport.NAVOIY — DO'KON VA ADMIN HAVOLALARI
+==================================================
+
+🌐 DO'KON SAYTI (Mijozlar va Ilova uchun):
+https://creates-comic-homeless-emerging.trycloudflare.com
+
+🛡️ ADMIN BOSHQARUV PANELI:
+https://creates-comic-homeless-emerging.trycloudflare.com/admin
+
+🔑 ADMIN LOGIN VA PAROL:
+Login: admin
+Parol: admin2026
+
+--------------------------------------------------
+ℹ️ MUHIM ESLATMA:
+Hozirgi havola kompyuteringizdagi server bilan ishlaydi.
+Agar kompyuteringiz o'chsa yoki internet uzilsa, 
+"Internetga_chiqarish.bat" faylini ikki marta bossangiz,
+sayt qayta internetga ulanadi.
+
+Butun umr 24/7 kompyuteringiz o'chiq bo'lsa ham ishlaydigan
+bitta doimiy havola kerak bo'lsa, uni bepul bulutli serverga
+(Render / Railway) joylab qo'yishimiz mumkin!
+==================================================
