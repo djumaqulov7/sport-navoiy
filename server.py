@@ -433,7 +433,12 @@ class Handler(SimpleHTTPRequestHandler):
 
         if path in {"/", "/index.html"}:
             self.path = "/web/index.html"
-        elif path in {"/admin", "/admin/", "/admin.html"}:
+        elif path in {"/admin", "/admin/"}:
+            self.send_response(302)
+            self.send_header("Location", "/admin.html")
+            self.end_headers()
+            return
+        elif path == "/admin.html":
             self.path = "/web/admin.html"
         elif path in {"/favicon.svg", "/styles.css", "/app.js", "/logo.svg", "/admin.js", "/manifest.json", "/sw.js", "/icon-192.png", "/icon-512.png"}:
             self.path = f"/web{path}"
